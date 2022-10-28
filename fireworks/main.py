@@ -17,7 +17,7 @@ while 1:
             sys.exit()
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_y:
-                for i in range(20):
+                for i in range(15):
                     f = Firework(i*200)
                     fireworks.append(f)
             if event.key == pg.K_t:
