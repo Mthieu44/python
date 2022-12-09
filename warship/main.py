@@ -78,6 +78,7 @@ while 1:
             pg.draw.rect(screen, col, r)
 
     # AFFICHAGE BATEAUX JOUEUR 1
+
     for b in j1.bateaux:
         if len(b.cases) == 1:
             c = b.cases[0]

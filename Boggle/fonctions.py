@@ -1,68 +1,55 @@
-class Grille:
-    def __init__(self, l1, l2, l3, l4):
-        self.tab = [[] for i in range(4)]
-        for i in l1:
-            self.tab[0].append(i)
-        for i in l2:
-            self.tab[1].append(i)
-        for i in l3:
-            self.tab[2].append(i)
-        for i in l4:
-            self.tab[3].append(i)
+from de import des
+from liste_mots import dico
+import random as rd
 
-    def voisins(self, x, y):
-        v = {}
-        if x > 0:
-            v[(x - 1, y)] = self.tab[y][x-1]
-            if y > 0:
-                v[(x - 1, y - 1)] = self.tab[y-1][x-1]
-            if y < 3:
-                v[(x - 1, y + 1)] = self.tab[y+1][x-1]
+def entree():
+    tab = [list(input("l1: ")), list(input("l2: ")), list(input("l3: ")), list(input("l4: "))]
+    return tab
 
-        if x < 3:
-            v[(x + 1, y)] = self.tab[y][x+1]
-            if y > 0:
-                v[(x + 1, y - 1)] = self.tab[y-1][x+1]
-            if y < 3:
-                v[(x + 1, y + 1)] = self.tab[y+1][x+1]
-
-        if y > 0:
-            v[(x, y - 1)] = self.tab[y-1][x]
-        if y < 3:
-            v[(x, y + 1)] = self.tab[y+1][x]
-
-        return {i:v[i] for i in v if v[i]}
+def gen_rdm():
+    tab = [[None for i in range(4)] for j in range(4)]
+    rd.shuffle(des)
+    for d in range(16):
+        tab[d//4][d%4] = des[d].lancer()
+    for i in tab:
+        print(i)
+    return tab
 
 
-'''
-def parcours2(grille, x, y, dico, i):
-    print(dico)
-    if len(dico) == 0 or i == 8:
-        return dico
-    else:
-        vois = grille.voisins(x, y)
-        dico2 = []
-        for m in dico:
-            if i == len(m):
-                print(m)
-                continue
-            if m[i] in vois.values():
-                dico2.append(m)
-        for v in vois:
-            parcours2(grille, v[0], v[1], dico2, i+1)
-'''
-
-def parcours2(grille, x, y, dico, i, p):
-    p += [(x, y)]
-    vois = grille.voisins(x, y)
-    for v in vois:
-        print(parcours2(grille, v[0], v[1], [m for m in dico if m[i] == vois[v] and v not in p], i+1, p))
+def cherche(tab, x, y):
+    mots = [[(x, y)]]
+    for i in range(7):
+        for m in range(len(mots)):
+            vois = voisins(mots[m][-1][0], mots[m][-1][1])
+            for v in vois:
+                if v not in mots[m] and len(mots[m] + [v]) == i+2:
+                    mots.append(mots[m] + [v])
 
 
+    mots2 = []
+    for m in mots:
+        if len(m) > 2:
+            s = ""
+            for l in m:
+                s += tab[l[1]][l[0]]
+            mots2.append(s)
+    return mots2
 
-def parcours(grille, x, y, dico):
-    dico = [m for m in dico if m[0] == grille.tab[y][x]]
-    print(dico)
-    print(parcours2(grille, x, y, dico, 1, []))
+def voisins(x, y):
+    v = []
+    for i in range(x-1 if x > 0 else 0, x+2 if x < 3 else 4):
+        for j in range(y-1 if y > 0 else 0, y+2 if y < 3 else 4):
+            if (i, j) != (x, y):
+                v.append((i, j))
+    return v
 
 
+def mots_dans_grille(tab):
+    mots = []
+    for i in range(4):
+        for j in range(4):
+            liste = cherche(tab, i, j)
+            for m in liste:
+                if m in dico and m not in mots:
+                    mots.append(m)
+    return sorted(list(set(mots)))

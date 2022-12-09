@@ -1,11 +1,14 @@
 from fonctions import *
 
-dico = [""]
-l1 = "abcd"
-l2 = "efgh"
-l3 = "ijkl"
-l4 = "mnop"
-g = Grille(l1, l2, l3, l4)
+taba = [
+['s', 'o', 'c', 'e'],
+['n', 'i', 'u', 'h'],
+['a', 'e', 's', 'a'],
+['g', 's', 'n', 'a']]
 
-p = parcours(g, 0, 0, ["djfghjyf", "aioge", "abc", "aejk", "afghl", "nokgh"])
-print(p)
+tab = entree()
+mots = mots_dans_grille(tab)
+print(len(mots))
+for i in range(len(mots)//10):
+       print(mots[i*10:i*10+10])
+print(mots[len(mots)//10*10:])
